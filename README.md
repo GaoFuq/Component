@@ -30,9 +30,14 @@
 2、壳工程的 Application 继承 com.like.component.BaseComponentApplication。
 
 3、组件的 Application 实现 com.like.component.IModuleApplication。
+
 注意：
+
     ①、实现类必须要有一个 public 的无参构造函数，用于反射构造组件 Application 的实例。
+
     ②、必须在组件的 AndroidManifest.xml 文件中进行如下配置：
+```java
     <meta-data
         android:name="实现类的全限定类名"
         android:value="IModuleApplication" />
+```
