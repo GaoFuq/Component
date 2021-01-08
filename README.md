@@ -39,5 +39,7 @@
 ```java
     <meta-data
         android:name="实现类的全限定类名"
-        android:value="IModuleApplication" />
+        android:value="IModuleApplication,priority" />
+
+    其中：priority 表示初始化的优先级，值越大越先初始化。如果不填，那么默认为0，表示最低优先级。
 ```
