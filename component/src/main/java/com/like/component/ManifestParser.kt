@@ -21,7 +21,7 @@ internal class ManifestParser(private val mContext: Context) {
         appInfo.metaData?.apply {
             this.keySet().forEach {
                 if (TAG_MODULE_APPLICATION == this.get(it)) {
-                    parseModuleApplication(it)?.let { moduleApplication ->
+                    createModuleApplication(it)?.let { moduleApplication ->
                         moduleApplications[it] = moduleApplication
                     }
                 }
@@ -30,7 +30,7 @@ internal class ManifestParser(private val mContext: Context) {
         return moduleApplications
     }
 
-    private fun parseModuleApplication(className: String): IModuleApplication? =
+    private fun createModuleApplication(className: String): IModuleApplication? =
         try {
             Class.forName(className).newInstance() as IModuleApplication?
         } catch (e: Exception) {
