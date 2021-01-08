@@ -23,7 +23,7 @@
             android:value="IModuleApplication" />
         <meta-data
             android:name="com.like.component.app.ModuleApplication1"
-            android:value="IModuleApplication" />
+            android:value="IModuleApplication,11" />
     </application>
 
 </manifest>

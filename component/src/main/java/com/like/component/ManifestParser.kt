@@ -2,30 +2,41 @@ package com.like.component
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.util.Log
+import java.util.*
+import kotlin.Comparator
 
 /**
  * 从合并后的AndroidManifest.xml文件中解析出所有组件中实现了 IModuleApplication 接口的类
  */
 internal class ManifestParser(private val mContext: Context) {
-    private val TAG_MODULE_APPLICATION = IModuleApplication::class.java.simpleName
 
-    fun parseModuleApplicationsFromMetaData(): Map<String, IModuleApplication> {
-        val moduleApplications = mutableMapOf<String, IModuleApplication>()
+    fun parseModuleApplicationsFromMetaData(): List<MetaDataInfo> {
         val appInfo = try {
             mContext.packageManager.getApplicationInfo(mContext.packageName, PackageManager.GET_META_DATA)
         } catch (e: Exception) {
             throw RuntimeException("组件中的 AndroidManifest.xml 下没有配置 meta-data 标签", e)
         }
+        val moduleApplications = sortedSetOf(Comparator<MetaDataInfo> { o1, o2 ->
+            return@Comparator o2.priority.compareTo(o1.priority)
+        })
         appInfo.metaData.keySet().forEach { className ->
-            if (TAG_MODULE_APPLICATION == appInfo.metaData.get(className)) {
-                moduleApplications[className] = try {
+            val values = appInfo.metaData.get(className)?.toString()?.split(",")
+            if (!values.isNullOrEmpty() && "IModuleApplication" == values[0]) {
+                val moduleApplication = try {
                     Class.forName(className).newInstance() as? IModuleApplication
                 } catch (e: Exception) {
                     null
-                } ?: throw RuntimeException("实例化组件中实现 $TAG_MODULE_APPLICATION 接口的 Application 失败")
+                } ?: throw RuntimeException("实例化组件中实现 IModuleApplication 接口的 Application 失败")
+                val priority = if (values.size > 1) {
+                    values[1].toInt()
+                } else {
+                    0
+                }
+                moduleApplications.add(MetaDataInfo(className, moduleApplication, priority))
             }
         }
-        return moduleApplications
+        return moduleApplications.toList()
     }
 
 }

@@ -11,11 +11,11 @@ import android.content.Context
  * 2、必须在组件的 AndroidManifest.xml 文件中进行如下配置：
  * <meta-data
  * android:name="实现类的全限定类名"
- * android:value="IModuleApplication" />
+ * android:value="IModuleApplication,priority" /> priority 表示初始化的优先级。默认为0，表示最低优先级。
  */
 interface IModuleApplication {
 
-    fun attachBaseContext(base: Context?)
+    fun attachBaseContext(base: Context)
 
     fun onCreate(application: Application)
 

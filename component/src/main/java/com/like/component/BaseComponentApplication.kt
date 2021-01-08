@@ -2,8 +2,6 @@ package com.like.component
 
 import android.app.Application
 import android.content.Context
-import android.content.pm.PackageManager
-import android.util.Log
 
 /**
  * 组件化架构时，壳工程的 Application 继承它。
@@ -14,7 +12,7 @@ open class BaseComponentApplication : Application() {
      */
     val mModuleApplicationDelegate: ModuleApplicationDelegate by lazy { ModuleApplicationDelegate() }
 
-    override fun attachBaseContext(base: Context?) {
+    override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
         mModuleApplicationDelegate.attachBaseContext(base)
     }

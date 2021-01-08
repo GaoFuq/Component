@@ -6,7 +6,7 @@ import android.util.Log
 import com.like.component.IModuleApplication
 
 class ModuleApplication1 : IModuleApplication {
-    override fun attachBaseContext(base: Context?) {
+    override fun attachBaseContext(base: Context) {
         Log.i(
             "IModuleApplication",
             "${ModuleApplication1::class.java.simpleName} attachBaseContext"
