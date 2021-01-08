@@ -3,6 +3,7 @@
     package="com.like.component.app">
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -16,6 +17,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.like.component.app.ModuleApplication0"
+            android:value="IModuleApplication" />
+        <meta-data
+            android:name="com.like.component.app.ModuleApplication1"
+            android:value="IModuleApplication" />
     </application>
 
 </manifest>

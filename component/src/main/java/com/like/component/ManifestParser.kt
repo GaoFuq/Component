@@ -7,14 +7,15 @@ import android.content.pm.PackageManager
  * 从合并后的AndroidManifest.xml文件中解析出所有组件中实现了 IModuleApplication 接口的类
  */
 internal class ManifestParser(private val mContext: Context) {
-    companion object {
-        private val TAG_MODULE_APPLICATION = IModuleApplication::class.java.simpleName
-    }
+    private val TAG_MODULE_APPLICATION = IModuleApplication::class.java.simpleName
 
     fun parseModuleApplicationsFromMetaData(): Map<String, IModuleApplication> {
         val moduleApplications = mutableMapOf<String, IModuleApplication>()
         val appInfo = try {
-            mContext.packageManager.getApplicationInfo(mContext.packageName, PackageManager.GET_META_DATA)
+            mContext.packageManager.getApplicationInfo(
+                mContext.packageName,
+                PackageManager.GET_META_DATA
+            )
         } catch (e: Exception) {
             throw RuntimeException("组件中的AndroidManifest.xml下没有配置meta-data标签", e)
         }
