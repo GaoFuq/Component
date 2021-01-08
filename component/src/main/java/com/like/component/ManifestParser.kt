@@ -12,29 +12,20 @@ internal class ManifestParser(private val mContext: Context) {
     fun parseModuleApplicationsFromMetaData(): Map<String, IModuleApplication> {
         val moduleApplications = mutableMapOf<String, IModuleApplication>()
         val appInfo = try {
-            mContext.packageManager.getApplicationInfo(
-                mContext.packageName,
-                PackageManager.GET_META_DATA
-            )
+            mContext.packageManager.getApplicationInfo(mContext.packageName, PackageManager.GET_META_DATA)
         } catch (e: Exception) {
-            throw RuntimeException("组件中的AndroidManifest.xml下没有配置meta-data标签", e)
+            throw RuntimeException("组件中的 AndroidManifest.xml 下没有配置 meta-data 标签", e)
         }
-        appInfo.metaData?.apply {
-            this.keySet().forEach {
-                if (TAG_MODULE_APPLICATION == this.get(it)) {
-                    createModuleApplication(it)?.let { moduleApplication ->
-                        moduleApplications[it] = moduleApplication
-                    }
-                }
+        appInfo.metaData.keySet().forEach { className ->
+            if (TAG_MODULE_APPLICATION == appInfo.metaData.get(className)) {
+                moduleApplications[className] = try {
+                    Class.forName(className).newInstance() as? IModuleApplication
+                } catch (e: Exception) {
+                    null
+                } ?: throw RuntimeException("实例化组件中实现 $TAG_MODULE_APPLICATION 接口的 Application 失败")
             }
         }
         return moduleApplications
     }
 
-    private fun createModuleApplication(className: String): IModuleApplication? =
-        try {
-            Class.forName(className).newInstance() as IModuleApplication?
-        } catch (e: Exception) {
-            throw RuntimeException("实例化组件中实现${TAG_MODULE_APPLICATION}接口的Application失败", e)
-        }
 }

@@ -9,15 +9,15 @@ class ModuleApplication0 : IModuleApplication {
     override fun attachBaseContext(base: Context?) {
         Log.d(
             "IModuleApplication",
-            "${ModuleApplication0::class.java.simpleName} attachBaseContext $base"
+            "${ModuleApplication0::class.java.simpleName} attachBaseContext"
         )
     }
 
     override fun onCreate(application: Application) {
-        Log.d("IModuleApplication", "${ModuleApplication0::class.java.simpleName} onCreate $application")
+        Log.d("IModuleApplication", "${ModuleApplication0::class.java.simpleName} onCreate")
     }
 
     override fun onTerminate(application: Application) {
-        Log.d("IModuleApplication", "${ModuleApplication0::class.java.simpleName} onTerminate $application")
+        Log.d("IModuleApplication", "${ModuleApplication0::class.java.simpleName} onTerminate")
     }
 }
