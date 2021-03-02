@@ -17,9 +17,7 @@ internal class ManifestParser(private val mContext: Context) {
         } catch (e: Exception) {
             throw RuntimeException("组件中的 AndroidManifest.xml 下没有配置 meta-data 标签", e)
         }
-        val moduleApplications = sortedSetOf(Comparator<MetaDataInfo> { o1, o2 ->
-            return@Comparator o2.priority.compareTo(o1.priority)
-        })
+        val moduleApplications = mutableListOf<MetaDataInfo>()
         appInfo.metaData.keySet().forEach { className ->
             val values = appInfo.metaData.get(className)?.toString()?.split(",")
             if (!values.isNullOrEmpty() && "IModuleApplication" == values[0]) {
@@ -36,7 +34,8 @@ internal class ManifestParser(private val mContext: Context) {
                 moduleApplications.add(MetaDataInfo(className, moduleApplication, priority))
             }
         }
-        return moduleApplications.toList()
+        moduleApplications.sortBy { -it.priority }
+        return moduleApplications
     }
 
 }
