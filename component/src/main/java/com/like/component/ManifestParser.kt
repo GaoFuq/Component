@@ -13,7 +13,10 @@ internal class ManifestParser(private val mContext: Context) {
 
     fun parseModuleApplicationsFromMetaData(): List<MetaDataInfo> {
         val appInfo = try {
-            mContext.packageManager.getApplicationInfo(mContext.packageName, PackageManager.GET_META_DATA)
+            mContext.packageManager.getApplicationInfo(
+                mContext.packageName,
+                PackageManager.GET_META_DATA
+            )
         } catch (e: Exception) {
             throw RuntimeException("组件中的 AndroidManifest.xml 下没有配置 meta-data 标签", e)
         }
@@ -31,6 +34,9 @@ internal class ManifestParser(private val mContext: Context) {
                 } else {
                     0
                 }
+                Log.e("class", className)
+                Log.e("priority", "$priority")
+
                 moduleApplications.add(MetaDataInfo(className, moduleApplication, priority))
             }
         }
